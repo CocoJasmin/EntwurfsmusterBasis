@@ -1,9 +1,9 @@
-import State.*;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import SmartphoneBasis.Smartphone;
+import State.Disabled;
+import State.Inactive;
+import State.Locked;
+import State.Unlocked;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
 import java.util.Random;
@@ -19,10 +19,12 @@ public class StatePatternTest {
     public void setup() {
         this.smartphone = new Smartphone();
         //smartphone initial state and Pins are correct
+        Assertions.assertNotNull(smartphone);
         Assertions.assertEquals(smartphone.getState().getClass(), Locked.class);
-        Assertions.assertEquals(7832,smartphone.getPin());
-        Assertions.assertEquals(93814,smartphone.getSuperPin());
+        Assertions.assertEquals(7832, smartphone.getPin());
+        Assertions.assertEquals(93814, smartphone.getSuperPin());
     }
+
     @Test
     @Order(1)
     public void enterValidPin() {
@@ -30,11 +32,12 @@ public class StatePatternTest {
         this.smartphone.pinValidation(smartphone.getPin());
         Assertions.assertEquals(Unlocked.class, smartphone.getState().getClass());
     }
+
     @Test
     @Order(2)
     public void enterWrongPinAndValidSuperPin() {
         //enter Pin wrong three times
-        for(int enterPinCount=0; enterPinCount<3; enterPinCount++) {
+        for (int enterPinCount = 0; enterPinCount < 3; enterPinCount++) {
             this.smartphone.pinValidation(1234);
         }
         Assertions.assertEquals(Disabled.class, smartphone.getState().getClass());
@@ -42,16 +45,17 @@ public class StatePatternTest {
         this.smartphone.pinValidation(smartphone.getSuperPin());
         Assertions.assertEquals(Unlocked.class, smartphone.getState().getClass());
     }
+
     @Test
     @Order(3)
     public void enterPinAndSuperPinWrongThreeTimes() {
         //enter Pin wrong three times
-        for(int enterPinCount=0; enterPinCount<3; enterPinCount++) {
+        for (int enterPinCount = 0; enterPinCount < 3; enterPinCount++) {
             this.smartphone.pinValidation(1234);
         }
         Assertions.assertEquals(Disabled.class, smartphone.getState().getClass());
         //enter Super-Pin wrong three times
-        for(int enterPinCount=0; enterPinCount<3; enterPinCount++) {
+        for (int enterPinCount = 0; enterPinCount < 3; enterPinCount++) {
             this.smartphone.pinValidation(1234);
         }
         Assertions.assertEquals(Inactive.class, smartphone.getState().getClass());
@@ -62,8 +66,8 @@ public class StatePatternTest {
     public void enterValidPinAfterEnteringWrong() {
         //enter Pin wrong several times, but not three times
         Random random = new Random();
-        int enterPinCount= random.nextInt(2 );
-        while(enterPinCount<2) {
+        int enterPinCount = random.nextInt(2);
+        while (enterPinCount < 2) {
             this.smartphone.pinValidation(1234);
             enterPinCount++;
         }
@@ -77,14 +81,14 @@ public class StatePatternTest {
     @Order(5)
     public void enterValidSuperPinAfterEnteringWrong() {
         //enter Pin wrong three times
-        for(int enterPinCount=0; enterPinCount<3; enterPinCount++) {
+        for (int enterPinCount = 0; enterPinCount < 3; enterPinCount++) {
             this.smartphone.pinValidation(1234);
         }
         Assertions.assertEquals(Disabled.class, smartphone.getState().getClass());
         //enter super-Pin wrong several times, but not three times
         Random random = new Random();
-        int enterPinCount= random.nextInt(2 );
-        while(enterPinCount<2) {
+        int enterPinCount = random.nextInt(2);
+        while (enterPinCount < 2) {
             this.smartphone.pinValidation(1234);
             enterPinCount++;
         }
@@ -93,4 +97,4 @@ public class StatePatternTest {
         this.smartphone.pinValidation(smartphone.getSuperPin());
         Assertions.assertEquals(Unlocked.class, smartphone.getState().getClass());
     }
-    }
+}
